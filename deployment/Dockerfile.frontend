@@ -1,0 +1,12 @@
+# deployment/Dockerfile.frontend  
+FROM node:18-alpine
+
+WORKDIR /app
+COPY frontend/nextjs-client/package*.json ./
+RUN npm install
+
+COPY frontend/nextjs-client/ .
+RUN npm run build
+
+EXPOSE 3000
+CMD ["npm", "start"]

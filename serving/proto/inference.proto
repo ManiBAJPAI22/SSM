@@ -1,0 +1,27 @@
+// serving/proto/inference.proto
+syntax = "proto3";
+
+package inference;
+option go_package = "./pb";
+
+service InferenceService {
+  rpc Generate(GenerateRequest) returns (GenerateReply);
+  rpc Health(HealthRequest) returns (HealthReply);
+}
+
+message GenerateRequest {
+  bytes audio_data = 1;
+  string text_prompt = 2;
+  int32 max_tokens = 3;
+}
+
+message GenerateReply {
+  string generated_text = 1;
+  float confidence_score = 2;
+  float latency_ms = 3;
+}
+
+message HealthRequest {}
+message HealthReply {
+  string status = 1;
+}

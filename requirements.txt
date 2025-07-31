@@ -1,0 +1,15 @@
+torch
+torchvision
+torchaudio
+mamba-ssm
+causal-conv1d
+transformers
+datasets
+librosa
+soundfile
+onnx
+onnxruntime
+tensorboard
+prometheus-client
+jupyter
+ipywidgets

@@ -1,0 +1,50 @@
+# deployment/docker-compose.yml
+version: '3.8'
+
+services:
+  inference-server:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile.serving
+    ports:
+      - "50051:50051"
+      - "8080:8080"
+    volumes:
+      - ../models:/app/models
+    environment:
+      - MODEL_PATH=/app/models/onnx/mamba_multimodal.onnx
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile.frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - inference-server
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:50051
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources
+
+volumes:
+  grafana-storage:

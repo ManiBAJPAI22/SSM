@@ -1,0 +1,17 @@
+# deployment/Dockerfile.serving
+FROM golang:1.22-alpine AS builder
+
+WORKDIR /app
+COPY serving/go-server/ .
+RUN go mod tidy
+RUN go mod download
+RUN go build -o inference-server .
+
+FROM alpine:latest
+RUN apk add --no-cache ca-certificates
+WORKDIR /root/
+COPY --from=builder /app/inference-server .
+COPY models/onnx/ ./models/
+
+EXPOSE 50051 8080
+CMD ["./inference-server"]

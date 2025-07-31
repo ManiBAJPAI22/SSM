@@ -1,0 +1,50 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "Inference Metrics",
+    "tags": ["inference", "ml"],
+    "style": "dark",
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Inference Request Duration",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "inference_request_duration_seconds",
+            "legendFormat": "{{method}}"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        }
+      },
+      {
+        "id": 2,
+        "title": "Inference Request Count",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "inference_requests_total",
+            "legendFormat": "{{method}} - {{status}}"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 0
+        }
+      }
+    ],
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "refresh": "5s"
+  }
+} 
