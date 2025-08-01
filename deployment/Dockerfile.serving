@@ -5,7 +5,7 @@ WORKDIR /app
 COPY serving/go-server/ .
 RUN go mod tidy
 RUN go mod download
-RUN go build -o inference-server .
+RUN go build -o inference-server main.go inference.go
 
 FROM alpine:latest
 RUN apk add --no-cache ca-certificates
